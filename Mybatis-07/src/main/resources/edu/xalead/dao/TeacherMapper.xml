@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespacce = 绑定一个对应的Dao/Mapper接口 对应之前的实现接口-->
+<mapper namespace="edu.xalead.dao.TeacherMapper">
+<!--按结果嵌套查询-->
+    <select id="getTeacher" resultMap="teacherStudent" parameterType="int">
+        select s.id sid,s.name sname,t.name tname, t.id tid
+        from student s,teacher t
+        where s.tid=t.id and t.id = #{tid}
+    </select>
+
+    <resultMap id="teacherStudent" type="Teacher">
+        <result property="id" column="tid"/>
+        <result property="name" column="tname"/>
+        <!--集合用 collection
+        javaType="" 这是指定特殊字段属性的类型
+        ofType 集合中的泛型信息
+        -->
+        <collection property="students" javaType="ArrayList" ofType="Student">
+            <result property="id" column="sid"/>
+            <result property="name" column="sname"/>
+            <result property="tid" column="tid"/>
+        </collection>
+    </resultMap>
+
+    <!--方法二 按照查询嵌套-->
+    <select id="getTeacher2" resultMap="teacherStudent2" parameterType="int">
+        select * from mybatis_test.teacher where id = #{tid}
+    </select>
+
+    <resultMap id="teacherStudent2" type="Teacher">
+        <!--没有变的字段也要写出来，否则结果中为空-->
+        <result property="id" column="id"/>
+        <collection property="students" column="id" javaType="ArrayList" ofType="Student" select="getStudentByTeacherId"></collection>
+    </resultMap>
+    <select id="getStudentByTeacherId" resultType="Student" parameterType="int">
+        select * from mybatis_test.student where tid = #{id}
+    </select>
+
+</mapper>

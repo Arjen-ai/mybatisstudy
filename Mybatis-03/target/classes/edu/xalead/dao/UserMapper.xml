@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespacce = 绑定一个对应的Dao/Mapper接口 对应之前的实现接口-->
+<mapper namespace="edu.xalead.dao.UserMapper">
+    <!--id 对应之前重写的方法名(Impl)-->
+    <!--resultType/resultMap 相当于之前的结果集Result-->
+
+    <!--<select id="getUserById" resultType="User" parameterType="int">-->
+      <!--select id,name,pwd as password from mybatis_test.m_user where id=#{id}-->
+    <!--</select>-->
+
+    <resultMap id="userMap" type="User">
+        <!--column 对应数据库列名 property 对应实体类属性名-->
+        <result column="pwd" property="password"/>
+    </resultMap>
+
+    <select id="getUserById" resultMap="userMap" parameterType="int">
+      select* from mybatis_test.m_user where id=#{id}
+    </select>
+
+
+</mapper>

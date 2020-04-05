@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespacce = 绑定一个对应的Dao/Mapper接口 对应之前的实现接口-->
+<mapper namespace="edu.xalead.dao.UserMapper">
+    <!--id 对应之前重写的方法名(Impl)-->
+    <!--resultType/resultMap 相当于之前的结果集Result-->
+    <select id="getUserList" resultType="edu.xalead.pojo.User">
+      select * from mybatis_test.m_user
+    </select>
+
+    <select id="getUserLike" resultType="edu.xalead.pojo.User">
+        select * from mybatis_test.m_user where name like #{value}
+    </select>
+
+    <select id="getUserById" resultType="edu.xalead.pojo.User" parameterType="int">
+      select * from mybatis_test.m_user where id=#{id}
+    </select>
+
+    <select id="getUserByIdAndName" resultType="edu.xalead.pojo.User" parameterType="map">
+      select * from mybatis_test.m_user where id=#{id} and `name`=#{name}
+    </select>
+
+    <!--对象中的属性可以直接取到-->
+    <insert id="addUser" parameterType="edu.xalead.pojo.User">
+        insert into mybatis_test.m_user(id,name,pwd) values (#{id},#{name},#{pwd})
+    </insert>
+
+    <update id="updateUser" parameterType="edu.xalead.pojo.User">
+        update mybatis_test.m_user set name=#{name},pwd=#{pwd}  where id=#{id};
+    </update>
+
+    <delete id="deleteUser" >
+        delete from mybatis_test.m_user where id=#{id}
+    </delete>
+
+</mapper>
